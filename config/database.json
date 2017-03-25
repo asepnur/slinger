@@ -1,0 +1,26 @@
+{  
+   "development":{  
+      "connectionLimit":"50",
+      "host":"localhost",
+      "user":"root",
+      "password":"",
+      "database":"powerdb",
+      "debug":false
+   },
+   "staging":{  
+      "connectionLimit":"100",
+      "host":"localhost",
+      "user":"root",
+      "password":"",
+      "database":"powerdb",
+      "debug":false
+   },
+   "production":{  
+      "connectionLimit":"100",
+      "host":"localhost",
+      "user":"root",
+      "password":"",
+      "database":"powerdb",
+      "debug":false
+   }
+}

@@ -1,0 +1,26 @@
+{  
+   "development":{  
+      "secret":"matdog",
+      "resave":true,
+      "saveUninitialized":true,
+      "cookie":{  
+         "maxAge":8.64e+7
+      }
+   },
+   "staging":{  
+      "secret":"matdog",
+      "resave":true,
+      "saveUninitialized":true,
+      "cookie":{  
+         "maxAge":8.64e+7
+      }
+   },
+   "production":{  
+      "secret":"matdog",
+      "resave":true,
+      "saveUninitialized":true,
+      "cookie":{  
+         "maxAge":8.64e+7
+      }
+   }
+}
