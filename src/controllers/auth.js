@@ -1,5 +1,4 @@
 const models = require('../models'),
-    sequelize = models.sequelize,
 	md5 = require('md5'),
     template = require('../templates/v1')
 
@@ -11,12 +10,11 @@ module.exports = {
         }
 
         // request validation
-        let email = req.body.email
-        let password = md5(req.body.password)
-        if(!email || !password) {
+        if(!req.body.email || !req.body.password) {
             return template.err(400, 'bad request', req, res)
         }
-
+        let email = req.body.email
+        let password = md5(req.body.password)
         // authenticate
         models.user.findOne({
             where: { 
@@ -28,7 +26,7 @@ module.exports = {
                 return template.err(403, 'not authorized', req, res)
             }
             req.session.user = user
-            return template.status(200, 'login success', req, res)
+            return template.data(200, 'login success', req, res)
         })
     },
     logout : (req, res, next) => {

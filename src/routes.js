@@ -2,12 +2,14 @@ const express = require('express'),
     router = express.Router()
     controllers = require('./controllers')
 
+router.get('/', controllers.user.index)
 router.post('/v1/login', controllers.auth.login)
 router.post('/v1/logout', controllers.auth.logout)
 router.post('/v1/messages', controllers.bot.listen())
 
 // 404 page
 router.get('*', controllers.error.err404)
+router.post('*', controllers.error.err404)
 router.put('*', controllers.error.err404)
 router.patch('*', controllers.error.err404)
 router.delete('*', controllers.error.err404)

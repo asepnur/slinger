@@ -1,19 +1,17 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
     let user = sequelize.define('user', {
-        email: {
-            allowNull: false,
-            primaryKey: true,
-            type: DataTypes.STRING(50)
+        user_id : {
+           type: DataTypes.INTEGER,
+           primaryKey: true
         },
-        password: {
-            type: DataTypes.STRING(32)
-        }
+        email: DataTypes.STRING(50),
+        password: DataTypes.STRING(32)
     },
     {
         classMethods: {
             associate: (models) => {
-            // associations can be defined here
+                user.belongsToMany(models.course, { as: 'courses', through: 'user_course', foreignKey: 'course_id' })
             }
         }
     })

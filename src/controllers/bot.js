@@ -22,6 +22,7 @@ bot.dialog('/', intents)
 // BOT dialog
 bot.dialog('/schedule', [
     (session, args, next) => {
+        console.log(session)
         // authenticate
         models.user.findOne({
             where: { 
