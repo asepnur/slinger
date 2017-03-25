@@ -3,8 +3,8 @@ let fs 		= require('fs'),
     files   = fs.readdirSync(__dirname) 
 
 files.forEach((file) => {
-	let filename=path.basename(file,'.js');
+	let filename=path.basename(file,'.js')
 	if(filename!=='index'){
-	    exports[filename]=require('./'+filename);
+	    exports[filename]=require('./'+filename)
 	}	
-});
+})

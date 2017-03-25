@@ -1,5 +1,17 @@
 module.exports = {
-    success : (code, data, req, res) => {
+    status : (code, status, req, res) => {
+        let url = req.path
+        let template = JSON.stringify({
+            code : code,
+            url : url,
+            status : status,
+            server : 'slinger'
+        })
+        res.writeHead(code, {'Content-Type': "application/json"})
+        res.write(template)
+        res.end()
+    },
+    data : (code, data, req, res) => {
         let url = req.path
         let template = JSON.stringify({
             code : code,
@@ -14,7 +26,7 @@ module.exports = {
     err : (code, message, req, res) => {
         let template = JSON.stringify({
             code : code,
-            message: message,
+            error: message,
             server : 'slinger'
         })
         res.writeHead(code, {'Content-Type': "application/json"})

@@ -22,5 +22,5 @@ app.use('/', routes)
 
 // create http server
 app.listen(port)
-console.log('listening on port %d', port)
+console.log('slinger listening on port %d', port)
 console.log('web service started')
