@@ -2,25 +2,31 @@
    "development":{  
       "connectionLimit":"50",
       "host":"localhost",
-      "user":"root",
+      "port":3306,
+      "username":"root",
       "password":"",
       "database":"powerdb",
-      "debug":false
+      "debug":false,
+      "dialect":"mysql"
    },
    "staging":{  
       "connectionLimit":"100",
       "host":"localhost",
-      "user":"root",
+      "port":3306,
+      "username":"root",
       "password":"",
       "database":"powerdb",
-      "debug":false
+      "debug":false,
+      "dialect":"mysql"
    },
    "production":{  
       "connectionLimit":"100",
       "host":"localhost",
-      "user":"root",
+      "port":3306,
+      "username":"root",
       "password":"",
       "database":"powerdb",
-      "debug":false
+      "debug":false,
+      "dialect":"mysql"
    }
 }

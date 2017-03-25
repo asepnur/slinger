@@ -1,11 +1,13 @@
-let builder = require('botbuilder')
-let luisconf = require('../../config/luis.json')
+// import package
+const builder = require('botbuilder'),
+      luisconf = require('../../config/luis.json'),
+      models = require('../models')
 
 // LUIS Init
-let recognizer = new builder.LuisRecognizer(luisconf.url)
-let intents = new builder.IntentDialog({ recognizers: [recognizer] })
-let connector = new builder.ChatConnector()
-let bot = new builder.UniversalBot(connector)
+const recognizer = new builder.LuisRecognizer(luisconf.url),
+      intents = new builder.IntentDialog({ recognizers: [recognizer] }),
+      connector = new builder.ChatConnector(),
+      bot = new builder.UniversalBot(connector)
 bot.recognizer(recognizer)
 
 // ================================================= //
@@ -19,9 +21,17 @@ bot.dialog('/', intents)
 
 // BOT dialog
 bot.dialog('/schedule', [
-    function (session, args, next) {
-        session.send('yes you ask me about schedule')
-        session.endDialog()
+    (session, args, next) => {
+        // authenticate
+        models.user.findOne({
+            where: { 
+                email: 'risal@live.com',
+                password: 'e10adc3949ba59abbe56e057f20f883e'
+            }
+        }).then((user) => {
+            session.send(user.email)
+            session.endDialog()
+        })
     }
 ])
 

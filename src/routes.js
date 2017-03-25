@@ -1,15 +1,23 @@
-let express = require('express'),
+const express = require('express'),
     router = express.Router()
     controllers = require('./controllers')
 
-router.post('/v1/login', controllers.user.index)
+router.post('/v1/login', controllers.auth.login)
+router.post('/v1/logout', controllers.auth.logout)
 router.post('/v1/messages', controllers.bot.listen())
+
+// 404 page
 router.get('*', controllers.error.err404)
-// router.get('/create', controllers.Create.index)
-// router.post('/pcreate',controllers.Create.create)
-// router.get('/edit/:product/:idb',controllers.Edit.bundle)
-// router.get('/edit/:product',controllers.Edit.product)
-// router.post('/pEditProduct',controllers.Edit.pEditProduct)
-// router.post('/pEditBundle',controllers.Edit.pEditBundle)
+router.put('*', controllers.error.err404)
+router.patch('*', controllers.error.err404)
+router.delete('*', controllers.error.err404)
+router.copy('*', controllers.error.err404)
+router.head('*', controllers.error.err404)
+router.options('*', controllers.error.err404)
+router.purge('*', controllers.error.err404)
+router.lock('*', controllers.error.err404)
+router.unlock('*', controllers.error.err404)
+router.move('*', controllers.error.err404)
+router.unlock('*', controllers.error.err404)
 
 module.exports = router
