@@ -208,8 +208,10 @@ const attendance = (session, text, req, res) => {
 const about = (session, text, req, res) => {
 	let message
 	const conversation = session.conversation
+	session.topic.name = null
 	message = MessageRender(`Hello I'm Fascal v0.0.1! Builded by Fahmi, Asep, and Ical in order to join COIN, Please enjoy my service!`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
 	conversation.push(message)
+	return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
 }
 
 const grade = (session, text, req, res) => {
@@ -282,12 +284,6 @@ const grade = (session, text, req, res) => {
 }
 
 const exit = (session, text, req, res) => {
-	if (session.topic.name === TOPIC_EXIT){
-		req.session.topic.name = null
-		const message = MessageRender(`Sorry, you are not in any topic`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
-		req.session.conversation.push(message)
-		return template.conversation(200, STATUS_NO_ACTION, req.session.conversation, req, res)	
-	}
 	req.session.topic.name = null
 	const message = MessageRender(`Successfully exiting topic`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
 	req.session.conversation.push(message)

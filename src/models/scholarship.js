@@ -10,6 +10,5 @@ module.exports = (sequelize, DataTypes) => {
         image : DataTypes.STRING(100),
         end_date : DataTypes.DATE
     })
-    console.log(scholarship)
     return scholarship
 }
