@@ -129,7 +129,6 @@ const scholarship = (session, text, req, res) => {
 	models.sequelize.query('SELECT * FROM scholarships WHERE end_date > now() ORDER BY end_date ASC LIMIT 5', {
 		model : models.scholarship
 	}).then((scholarship) => {
-		session.topic.name = null
 		message = MessageRender(scholarship, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_SCHOLARSHIP)
 		conversation.push(message)
 		return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
