@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
            primaryKey: true
         },
         email: DataTypes.STRING(50),
-        password: DataTypes.STRING(32)
+        password: DataTypes.STRING(32),
+        image: DataTypes.STRING(100)
     },
     {
         classMethods: {

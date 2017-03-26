@@ -28,8 +28,10 @@ module.exports = {
             if (user.length <= 0) {
                 return template.data(200, 'login failed', req, res)
             }
-            console.log(user[0])
             req.session.user = user[0]
+            if(req.session.user.image){
+                req.session.user.image = '/' + req.session.user.image
+            }
             return template.data(200, 'login success', req, res)
         })
     },
