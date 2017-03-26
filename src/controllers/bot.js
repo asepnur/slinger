@@ -80,11 +80,11 @@ const schedule = (session, text, req, res) => {
 			}).then((course) => {
 				session.topic.name = null
 				if(course.length <= 0){
-					message = MessageRender(`Horray! You dont have any schedule today!`, STATUS_CONVERSATION_BOT, img.bot ,STATUS_CONVERSATION_SCHEDULE)
+					message = MessageRender(`Horray! You dont have any schedule today!`, STATUS_CONVERSATION_BOT, img.bot ,STATUS_CONVERSATION_NOACTION)
 					conversation.push(message)
 					return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
 				}
-				message = MessageRender(`Here is your schedule!`, STATUS_CONVERSATION_BOT, img.bot ,STATUS_CONVERSATION_SCHEDULE)
+				message = MessageRender(`Here is your schedule!`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 				conversation.push(message)
 				message = MessageRender(course, STATUS_CONVERSATION_BOT, img.bot ,STATUS_CONVERSATION_SCHEDULE)
 				conversation.push(message)
@@ -98,7 +98,7 @@ const auth = (session, text, req, res) => {
 	const conversation = session.conversation
 	session.topic.name = null
 	if(!session.welcome){
-		message = MessageRender(`Hello I'm Fascal, you can ask me about practicuum`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
+		message = MessageRender(`Hello I'm Fascal, you can ask me about practicuum`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 		conversation.push(message)
 		session.welcome = true
 	}
@@ -130,7 +130,7 @@ const scholarship = (session, text, req, res) => {
 		model : models.scholarship
 	}).then((scholarship) => {
 		session.topic.name = null
-		message = MessageRender(scholarship, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_SCORE)
+		message = MessageRender(scholarship, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_SCHOLARSHIP)
 		conversation.push(message)
 		return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
 	})
@@ -192,7 +192,7 @@ const attendance = (session, text, req, res) => {
 				}).then((grades) => {
 					session.topic.name = null
 					if (grades.length <= 0){
-						message = MessageRender(`Sorry. You dont have any attendance for this course`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_GRADE)
+						message = MessageRender(`Sorry. You dont have any attendance for this course`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 						conversation.push(message)
 						return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
 					}
@@ -209,7 +209,7 @@ const about = (session, text, req, res) => {
 	let message
 	const conversation = session.conversation
 	session.topic.name = null
-	message = MessageRender(`Hello I'm Fascal v0.0.1! Builded by Fahmi, Asep, and Ical in order to join COIN, Please enjoy my service!`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
+	message = MessageRender(`Hello I'm Fascal v0.0.1! Builded by Fahmi, Asep, and Ical in order to join COIN, Please enjoy my service!`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 	conversation.push(message)
 	return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
 }
@@ -270,7 +270,7 @@ const grade = (session, text, req, res) => {
 				}).then((grades) => {
 					session.topic.name = null
 					if (grades.length <= 0){
-						message = MessageRender(`Sorry. You dont have any grade for this course`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_GRADE)
+						message = MessageRender(`Sorry. You dont have any grade for this course`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 						conversation.push(message)
 						return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
 					}
@@ -285,14 +285,14 @@ const grade = (session, text, req, res) => {
 
 const exit = (session, text, req, res) => {
 	req.session.topic.name = null
-	const message = MessageRender(`Successfully exiting topic`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
+	const message = MessageRender(`Successfully exiting topic`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 	req.session.conversation.push(message)
 	return template.conversation(200, STATUS_NO_ACTION, req.session.conversation, req, res)
 }
 
 const unhandeld = (session, text, req, res) => {
 	req.session.topic.name = null
-	const message = MessageRender(`Sorry, I don't understand what do u mean brother. Now, my feature just only for checking schedule and score`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
+	const message = MessageRender(`Sorry, I don't understand what do u mean brother. Now, my feature just only for checking schedule and score`, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_NOACTION)
 	req.session.conversation.push(message)
 	return template.conversation(200, STATUS_NO_ACTION, req.session.conversation, req, res)
 }
