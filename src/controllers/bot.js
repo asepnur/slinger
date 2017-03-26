@@ -88,6 +88,20 @@ const auth = (session, text, req, res) => {
 	}
 }
 
+const scholarship = (session, text, req, res) => {
+	console.log(models.sequelize)
+	console.log(models.user)
+	let message
+	const conversation = session.conversation
+	models.sequelize.query('SELECT * FROM scholarships WHERE end_date > now() ORDER BY end_date ASC LIMIT 5', {
+		model : models.scholarship
+	}).then((scholarship) => {
+		message = MessageRender(scholarship, STATUS_CONVERSATION_BOT, img.bot, STATUS_CONVERSATION_SCORE)
+		conversation.push(message)
+		return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+	})
+}
+
 module.exports = {
 	index : (req,res,next) => {
 		if (!req.session.conversation){
@@ -116,10 +130,12 @@ module.exports = {
 				return schedule(req.session, text, req, res)
 			case `score`:
 				return score(req.session, text, req, res)
+			case `scholarship`:
+				return scholarship(req.session, text, req, res)
 			default:
-				message = MessageRender(`Sorry, I don't understand what do u mean brother. Now, my feature just only for checking schedule and score`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
-				conversation.push(message)
-				return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+				const message = MessageRender(`Sorry, I don't understand what do u mean brother. Now, my feature just only for checking schedule and score`, STATUS_CONVERSATION_BOT, img.bot, STATUS_NO_ACTION)
+				req.session.conversation.push(message)
+				return template.conversation(200, STATUS_NO_ACTION, req.session.conversation, req, res)
 		}
 		return template.status(200, 'lewat', req, res)
 	}

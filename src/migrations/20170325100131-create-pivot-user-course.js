@@ -33,6 +33,6 @@ module.exports = {
     },
 
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('courses')
+        return queryInterface.dropTable('user_course')
     }
 }
