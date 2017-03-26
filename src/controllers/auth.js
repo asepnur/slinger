@@ -13,19 +13,23 @@ module.exports = {
         if(!req.body.email || !req.body.password) {
             return template.err(400, 'bad request', req, res)
         }
+        
         let email = req.body.email
         let password = md5(req.body.password)
+
         // authenticate
-        models.user.findOne({
-            where: { 
+        models.sequelize.query('SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1', {
+            replacements: {
                 email: email,
-                password: password
-            }
+                password: password 
+            },
+            model : models.user
         }).then((user) => {
-            if(!user) {
-                return template.err(403, 'not authorized', req, res)
+            if (user.length <= 0) {
+                return template.data(200, 'login failed', req, res)
             }
-            req.session.user = user
+            console.log(user[0])
+            req.session.user = user[0]
             return template.data(200, 'login success', req, res)
         })
     },

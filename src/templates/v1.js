@@ -32,5 +32,20 @@ module.exports = {
         res.writeHead(code, {'Content-Type': "application/json"})
         res.write(template)
         res.end()
+    },
+    conversation : (code, login, conversation, req, res) => {
+        const url = req.path
+              data = new Object
+        data.status = login
+        data.conversation = conversation
+        const template = JSON.stringify({
+            code : code,
+            url : url,
+            data : data,
+            server : 'slinger'
+        })
+        res.writeHead(code, {'Content-Type': "application/json"})
+        res.write(template)
+        res.end()
     }
 }

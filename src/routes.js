@@ -1,11 +1,11 @@
 const express = require('express'),
-    router = express.Router()
-    controllers = require('./controllers')
+      router = express.Router()
+      controllers = require('./controllers')
 
-router.get('/', controllers.user.index)
+router.get('/', controllers.bot.index)
 router.post('/v1/login', controllers.auth.login)
 router.post('/v1/logout', controllers.auth.logout)
-router.post('/v1/messages', controllers.bot.listen())
+router.post('/v1/messages', controllers.user.index)
 
 // 404 page
 router.get('*', controllers.error.err404)

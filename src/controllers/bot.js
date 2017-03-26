@@ -1,48 +1,123 @@
-// import package
-const builder = require('botbuilder'),
-      luisconf = require('../../config/luis.json'),
-      models = require('../models')
+const template = require('../templates/v1'),
+	models = require('../models')
 
-// LUIS Init
-const recognizer = new builder.LuisRecognizer(luisconf.url),
-      intents = new builder.IntentDialog({ recognizers: [recognizer] }),
-      connector = new builder.ChatConnector(),
-      bot = new builder.UniversalBot(connector)
-bot.recognizer(recognizer)
+// action status
+const 	STATUS_NO_ACTION = 0,
+		STATUS_LOGIN = 1
 
-// ================================================= //
-// =================== BOT ROUTE =================== //
-// ================================================= //
+// conversation status
+const 	STATUS_CONVERSATION_BOT = 0,
+		STATUS_CONVERSATION_USER = 1
 
-// BOT and intent configuration
-intents.matches('ShowSchedule','/schedule')
-intents.matches('ShowScore', '/score')
-bot.dialog('/', intents)
+// conversation action
+const 	STATUS_CONVERSATION_NOACTION = 0,
+		STATUS_CONVERSATION_SCORE = 1,
+		STATUS_CONVERSATION_SCHEDULE = 2
 
-// BOT dialog
-bot.dialog('/schedule', [
-    (session, args, next) => {
-        console.log(session)
-        // authenticate
-        models.user.findOne({
-            where: { 
-                email: 'risal@live.com',
-                password: 'e10adc3949ba59abbe56e057f20f883e'
-            }
-        }).then((user) => {
-            session.send(user.email)
-            session.endDialog()
-        })
-    }
-])
+const MessageRender = (data, sender, action) => {
+	const message = {
+		date : Date.now(),
+		user: sender,
+		data: data,
+		action : STATUS_CONVERSATION_NOACTION
+	}
+	if(action) {
+		message.action = action
+	}
+	return message
+}
 
-bot.dialog('/score', [
-    function (session, args, next) {
-        session.send('yes you ask me about score')
-        session.endDialog()
-    }
-])
+const schedule = (session, text, req, res) => {
+	let message
+	const conversation = session.conversation
+	models.sequelize.query('SELECT * FROM courses WHERE course_id IN (SELECT course_id FROM user_course WHERE user_id = :user_id)', {
+		replacements: {
+			user_id : req.session.user.user_id
+		},
+		model : models.course
+	}).then((course) => {
+		message = MessageRender(course, STATUS_CONVERSATION_BOT, STATUS_CONVERSATION_SCHEDULE)
+		conversation.push(message)
+		return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+	})
+}
 
-module.exports = connector
+const score = (session, text, req, res) => {
+	let message
+	const conversation = session.conversation
+	models.sequelize.query('SELECT * FROM courses WHERE course_id IN (SELECT course_id FROM user_course WHERE user_id = :user_id)', {
+		replacements: {
+			user_id : req.session.user.user_id
+		},
+		model : models.course
+	}).then((course) => {
+		message = MessageRender(course, STATUS_CONVERSATION_BOT, STATUS_CONVERSATION_SCORE)
+		conversation.push(message)
+		return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+	})
+}
 
-// ====================== END ====================== //
+const auth = (session, text, req, res) => {
+	let message
+	const conversation = session.conversation
+	if(!session.welcome){
+		message = MessageRender(`Hello I'm Fascal, you can ask me about practicuum`, STATUS_CONVERSATION_BOT)
+		conversation.push(message)
+		session.welcome = true
+	}
+	switch (text){
+		case 'login':
+			if(session.user){
+				message = MessageRender(`You have already logged in`)
+				conversation.push(message)
+				return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+			}
+			return template.conversation(200, STATUS_LOGIN, session.conversation, req, res)
+		case 'logout':
+			message = (session.user) ? MessageRender(`logout success`, STATUS_CONVERSATION_BOT) : MessageRender(`You have already logged out`, STATUS_CONVERSATION_BOT)
+			console.log(message)
+			conversation.push(message)
+			session.user = null
+			return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+		default:
+			message = MessageRender(`To use my service, please type login`, STATUS_CONVERSATION_BOT)
+			conversation.push(message)
+			return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+	}
+}
+
+module.exports = {
+	index : (req,res,next) => {
+		if (!req.session.conversation){
+			req.session.conversation = new Array
+		}
+		const text = req.body.text || ''
+
+		// check if has a text
+		if (text) {
+			const message = MessageRender(text, STATUS_CONVERSATION_USER)
+			req.session.conversation.push(message)
+		}
+
+		// auth
+		if(!req.session.user){
+			return auth(req.session, text, req, res)
+		}
+
+		switch(text){
+			case `logout`:
+				return auth(req.session, text, req, res)
+			case `login`:
+				return auth(req.session, text, req, res)
+			case `schedule`:
+				return schedule(req.session, text, req, res)
+			case `score`:
+				return score(req.session, text, req, res)
+			default:
+				message = MessageRender(`Sorry, I don't understand what do u mean brother. Now, my feature just only for checking schedule and score`, STATUS_CONVERSATION_BOT)
+				conversation.push(message)
+				return template.conversation(200, STATUS_NO_ACTION, session.conversation, req, res)
+		}
+		return template.status(200, 'lewat', req, res)
+	}
+}
