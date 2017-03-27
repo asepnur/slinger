@@ -25,3 +25,9 @@ const server = app.listen(port, () => {
     console.log('slinger listening on %d', server.address().port)
     console.log('web service started')
 })
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});

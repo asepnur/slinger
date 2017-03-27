@@ -7,7 +7,7 @@ module.exports = {
             status : status,
             server : 'slinger'
         })
-        res.writeHead(code, {'Content-Type': "application/json"})
+        res.writeHead(code, {'Content-Type': "application/json",'Access-Control-Allow-Origin':'http://localhost:3000'})
         res.write(template)
         res.end()
     },
@@ -19,7 +19,7 @@ module.exports = {
             data : data,
             server : 'slinger'
         })
-        res.writeHead(code, {'Content-Type': "application/json"})
+        res.writeHead(code, {'Content-Type': "application/json",'Access-Control-Allow-Origin':'http://localhost:3000'})
         res.write(template)
         res.end()
     },
@@ -29,7 +29,7 @@ module.exports = {
             error: message,
             server : 'slinger'
         })
-        res.writeHead(code, {'Content-Type': "application/json"})
+        res.writeHead(code, {'Content-Type': "application/json",'Access-Control-Allow-Origin':'http://localhost:3000'})
         res.write(template)
         res.end()
     },
@@ -44,7 +44,7 @@ module.exports = {
             data : data,
             server : 'slinger'
         })
-        res.writeHead(code, {'Content-Type': "application/json"})
+        res.writeHead(code, {'Content-Type': "application/json",'Access-Control-Allow-Origin':'http://localhost:3000'})
         res.write(template)
         res.end()
     }
